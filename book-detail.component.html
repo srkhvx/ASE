@@ -1,0 +1,27 @@
+<div class="button-row">
+  <a mat-raised-button color="primary" [routerLink]="['/books']"><mat-icon>list</mat-icon></a>
+</div>
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title><h2>{{book.Customer_ID}}</h2></mat-card-title>
+    <mat-card-subtitle>{{book.Customer_Age}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <dl>
+      <dt>Customer ID:</dt>
+      <dd>{{book.Customer_ID}}</dd>
+      <dt>Customer Married:</dt>
+      <dd>{{book.Customer_married}}</dd>
+      <dt>License:</dt>
+      <dd>{{book.Customer_License}}</dd>
+      <dt>Total Cars:</dt>
+      <dd>{{book.Customer_car}}</dd>
+      <dt>Update Date:</dt>
+      <dd>{{book.updated_date | date}}</dd>
+    </dl>
+  </mat-card-content>
+  <mat-card-actions>
+    <a mat-raised-button color="primary" [routerLink]="['/book-edit', book._id]"><mat-icon>edit</mat-icon></a>
+    <a mat-raised-button color="warn" (click)="deleteBook(book._id)"><mat-icon>delete</mat-icon></a>
+  </mat-card-actions>
+</mat-card>
