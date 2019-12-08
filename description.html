@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+		
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+        <style>
+            body {
+              margin: 0;
+              font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .topnav {
+              overflow: hidden;
+              background-color: #333;
+            }
+
+            .topnav a {
+              float: left;
+              color: #f2f2f2;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none;
+              font-size: 17px;
+            }
+
+            .topnav a:hover {
+              background-color: #ddd;
+              color: black;
+            }
+
+            .topnav a.active {
+              background-color: #4CAF50;
+              color: white;
+            }
+
+            p{
+            	color: white;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <h1 id = "awais" style="text-align: center;"><span style = "color:red">K</span>ansas <span style = "color:red">C</span>ity Crime Rate Analysis</h1><br>
+
+        <div class="topnav">
+          <a class="active" href="">Home</a>
+          <a href="analysis">Analysis</a>
+          <a href="description">Description</a>
+          <a href="#about">About</a>
+        </div>
+        <br>
+
+        <form action="" method="post">
+            <div class="row">
+                <div class="col-md-2">
+                    <select id = "sel_id" data-placeholder="Begin typing a name to filter..." multiple class="chosen-select" name="sel_name">
+        <!--            <select id="sel_id" name="sel_name" multiple class = "chosen-select">-->
+                        <option value="-1">Select</option>
+                        {% for descr in desc_drop %}
+                        <option value= "{{descr}}">{{descr}}</option>"
+                        {% endfor %}
+                    </select>
+                </div>
+                
+            </div>
+        <br>
+        <input type="submit" value="submit">
+        </form>
+        <br>
+        <div class="row">
+            
+            <div class="col-md-4">
+                 
+                <canvas id="myChart" width="10" height="5"></canvas>
+            </div>
+            <div class="col-md-8">
+            	{% for descr,val in pr%}
+                    
+                    <span>Total crimes in {{descr}} are: {{val}}</span><br>
+                {% endfor %}
+            </div>
+            
+        </div>
+        <script>
+        	var test = {{desc_lab|tojson}};
+        	var test2 = {{desc_data|tojson}};
+        	console.log(test);
+        	console.log(test2);
+        	new Chart(document.getElementById("myChart"), {
+		    type: 'bar',
+		    data: {
+		      labels: test,
+		      datasets: [
+		        {
+		          label: "Crimes ",
+		          backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+		          data: test2
+		        }
+		      ]
+		    },
+		    options: {
+		      legend: { display: false },
+		      title: {
+		        display: true,
+		        text: 'Occurance of crime each year'
+		      }
+		    }
+		});
+        </script>
+
+      
+    <script>
+        $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+        })
+    </script>
+
+    </body>
+</html>

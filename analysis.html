@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+		{{"decoupled-map"|googlemap_js(37.4419, -122.1419, markers=[(37.4419, -122.1419)])}}
+        {{mymap.js}}        
+
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+        <style>
+            body {
+              margin: 0;
+              font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .topnav {
+              overflow: hidden;
+              background-color: #333;
+            }
+
+            .topnav a {
+              float: left;
+              color: #f2f2f2;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none;
+              font-size: 17px;
+            }
+
+            .topnav a:hover {
+              background-color: #ddd;
+              color: black;
+            }
+
+            .topnav a.active {
+              background-color: #4CAF50;
+              color: white;
+            }
+
+            p{
+            	color: white;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <h1 id = "awais" style="text-align: center;"><span style = "color:red">K</span>ansas <span style = "color:red">C</span>ity Crime Rate Analysis</h1><br>
+
+        <div class="topnav">
+          <a class="active" href="">Home</a>
+          <a href="analysis">Analysis</a>
+          <a href="description">Description</a>
+          <a href="#about">About</a>
+        </div>
+        <br>
+
+        <form action="" method="post">
+            <div class="row">
+                <div class="col-md-2">
+                	<p style="color: black;">Enter Month:</p>
+                    <input type="text" name="analysis_month"><br>
+                    <p style="color: black;">Enter Offense No:</p>
+                    <input type="text" name="analysis_offense"><br>
+                    <p style="color: black;">Enter Distance(Miles)</p>
+                    <input type="text" name="analysis_distance"><br>
+                    <p style="color: black;">Enter Zip Code</p>
+                    <input type="text" name="analysis_zip">
+                </div>
+            </div>
+        <br>
+        <input type="submit" value="submit">
+        </form>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <h1>Map View Of Crimes</h1>
+            </div>
+            <div class="col-md-8">
+                <h1>First Graph</h1>
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                {{mymap.html}}
+                <h3 style="color: white; font-size: 20px">{{crime}} : {{count_num}}</h3><br>
+                <h3 style="color: white; font-size: 20px">{{crime}} : {{year_count}}</h3>
+            </div>
+        </div>
+
+<!--        <h2> Template function centered, no marker </h2>-->
+<!--        {{googlemap("simple-map", 37.4419, -122.1419)}}-->
+
+<!--        <h2> Template filter decoupled with single marker </h2>-->
+<!--        {{"decoupled-map"|googlemap_html(37.4419, -122.1419)}}-->
+
+<!--        <h2> Template function with multiple markers </h2>-->
+<!--        {% with map=googlemap_obj("another-map", 37.4419, -122.1419, markers=[(37.4419, -122.1419), (37.4300, -122.1400)]) %}-->
+<!--            {{map.html}}-->
+<!--            {{map.js}}-->
+<!--        {% endwith %}-->
+        
+</script>
+
+    <script>
+        $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+        })
+    </script>
+
+    </body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        {{"decoupled-map"|googlemap_js(37.4419, -122.1419, markers=[(37.4419, -122.1419)])}}
+        {{mymap.js}}
+        {{sndmap.js}}
+
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+        <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+
+        <style>
+            body {
+              margin: 0;
+              font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .topnav {
+              overflow: hidden;
+              background-color: #333;
+            }
+
+            .topnav a {
+              float: left;
+              color: #f2f2f2;
+              text-align: center;
+              padding: 14px 16px;
+              text-decoration: none;
+              font-size: 17px;
+            }
+
+            .topnav a:hover {
+              background-color: #ddd;
+              color: black;
+            }
+
+            .topnav a.active {
+              background-color: #4CAF50;
+              color: white;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <h1 id = "awais" style="text-align: center;"><span style = "color:red">K</span>ansas <span style = "color:red">C</span>ity Crime Rate Analysis</h1><br>
+
+        <div class="topnav">
+          <a class="active" href="home">Home</a>
+          <a href="analysis">Analysis</a>
+          <a href="description">Description</a>
+          <a href="#about">About</a>
+        </div>
+        <br>
+
+        <form action="" method="post">
+            <div class="row">
+                <div class="col-md-2">
+                    <select id = "sel_id" data-placeholder="Begin typing a name to filter..." multiple class="chosen-select" name="sel_name">
+        <!--            <select id="sel_id" name="sel_name" multiple class = "chosen-select">-->
+                        <option value="-1">Select</option>
+                        {% for descr in desc_li %}
+                        <option value= "{{descr}}">{{descr}}</option>"
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id = "sel_year_id" name ="sel_year">
+                        <option value = "-1">Select</option>
+                        <option value = "2018">2018</option>
+                        <option value = "2017">2017</option>
+                        <option value = "2016">2016</option>
+                    </select>
+                </div>
+            </div>
+        <br>
+        <input type="submit" value="submit">
+        </form>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <h1>Map View Of Crimes</h1>
+            </div>
+            <div class="col-md-8">
+                <h1>Occurance of Crimes</h1>
+            </div>
+            
+        </div>
+
+<!--        <h2> Template function centered, no marker </h2>-->
+<!--        {{googlemap("simple-map", 37.4419, -122.1419)}}-->
+
+<!--        <h2> Template filter decoupled with single marker </h2>-->
+<!--        {{"decoupled-map"|googlemap_html(37.4419, -122.1419)}}-->
+
+<!--        <h2> Template function with multiple markers </h2>-->
+<!--        {% with map=googlemap_obj("another-map", 37.4419, -122.1419, markers=[(37.4419, -122.1419), (37.4300, -122.1400)]) %}-->
+<!--            {{map.html}}-->
+<!--            {{map.js}}-->
+<!--        {% endwith %}-->
+        <div class="row">
+            <div class="col-md-4">
+                {{mymap.html}}
+                <h3 style="color: white; font-size: 20px">{{crime}} : {{count_num}}</h3><br>
+                <h3 style="color: white; font-size: 20px">{{crime}} : {{year_count}}</h3>
+            </div>
+
+            <div class="col-md-8">
+                 
+                <canvas id="myChart" width="10" height="5"></canvas>
+            </div>
+            
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Crime Comparison</h1>
+                <canvas id="myChart2" width="5" height="2"></canvas>
+            </div>
+            <div class="col-md-2">
+                <h1>Suspect Graph</h1>
+                <canvas id="suspect_chart" width="10" height="10"></canvas>
+            </div>
+            <div class="col-md-2">
+                <h1>Victim Graph</h1>
+                <canvas id="victim_chart" width="10" height="10"></canvas>
+            </div>
+            <div class="col-md-2">
+                <h1>Arrest Graph</h1>
+                <canvas id="arrest_chart" width="10" height="10"></canvas>
+            </div>    
+            
+        </div>
+
+
+
+<!--        <h2> Second map generated in view</h2>-->
+<!--        <h3> Example for different icons in multiple markers with infoboxes</h3>-->
+<!--        {{sndmap.html}}-->
+
+
+
+
+        
+
+
+
+
+    <script>
+            var lab = {{lab|tojson}};
+            var dat = {{dat|tojson}};
+            var pie_lab = {{pie_label|tojson}}
+            var pie_dat = {{pie_data|tojson}}
+            var sus_li = {{sus_list|tojson}}
+            console.log(sus_li)
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+            var sus_ctx = document.getElementById('suspect_chart').getContext('2d');
+            var vic_ctx = document.getElementById('victim_chart').getContext('2d');
+            var arr_ctx = document.getElementById('arrest_chart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: lab,
+                    datasets: [{
+                        label: '# of crimes',
+                        data: dat,
+                        backgroundColor: [
+                            'rgba(0, 0, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+
+            var myChart2 = new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                  labels: pie_lab,
+                  datasets: [{
+                    label: "Population (millions)",
+                    backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+                    data: pie_dat
+                  }]
+                },
+                options: {
+                  title: {
+                    display: true,
+                    text: ''
+                  }
+                }
+            });
+
+
+            var suspect_chart = new Chart(sus_ctx, {
+                type: 'pie',
+                data: {
+                  labels: pie_lab,
+                  datasets: [{
+                    label: "Population (millions)",
+                    backgroundColor: ["#e8c3b9", "#c45850","#3e95cd","#e8c3b9","#8e5ea2"],
+                    data: sus_li[0]
+                  }]
+                },
+                options: {
+                  title: {
+                    display: true,
+                    text: ''
+                  }
+                }
+            });
+
+
+            var victim_chart = new Chart(vic_ctx, {
+                type: 'pie',
+                data: {
+                  labels: pie_lab,
+                  datasets: [{
+                    label: "Population (millions)",
+                    backgroundColor: ["#c45850", "#3e95cd","#3cba9f","#e8c3b9","#c45850"],
+                    data: sus_li[1]
+                  }]
+                },
+                options: {
+                  title: {
+                    display: true,
+                    text: ''
+                  }
+                }
+            });
+
+            var arrest_chart = new Chart(arr_ctx, {
+                type: 'pie',
+                data: {
+                  labels: pie_lab,
+                  datasets: [{
+                    label: "Population (millions)",
+                    backgroundColor: ["#e8c3b9", "#3e95cd","#3cba9f","#e8c3b9","#c45850"],
+                    data: sus_li[2]
+                  }]
+                },
+                options: {
+                  title: {
+                    display: true,
+                    text: ''
+                  }
+                }
+            });
+
+</script>
+
+    <script>
+        $(".chosen-select").chosen({
+        no_results_text: "Oops, nothing found!"
+        })
+    </script>
+
+    </body>
+</html>
